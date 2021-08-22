@@ -10,7 +10,7 @@ router.post("/login", async (req, res) => {
     (await hashComparer.hashCompare(req.body.password, user.password))
       ? res.status(200).json({
           message: "user Logged in successfully",
-          token: token.generateToken(user.id),
+          token: token.generateToken(user.id, "User"),
         })
       : res.status(400).json({ message: "user credentials error" });
   } else {

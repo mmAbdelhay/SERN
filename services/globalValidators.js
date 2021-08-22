@@ -5,11 +5,7 @@ module.exports.validateName = (name_to_validate) => {
 };
 
 module.exports.validateEmail = (email_to_validate) => {
-  return /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(
-    email_to_validate
-  )
-    ? true
-    : false;
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email_to_validate) ? true : false;
 };
 
 module.exports.validatePassword = (password_to_validate) => {
