@@ -21,9 +21,14 @@ router.post("/login", async (req, res) => {
 router.post("/register", async (req, res) => {
   const validation_errors = validators(req.body);
   if (Object.keys(validation_errors).length === 0) {
-    (await userRepository.InsertUser(req.body))
-      ? res.status(200).json({ message: "Registered Successfully" })
-      : res.status(500).json({ message: "Database Error Occurred" });
+    const user = await userRepository.FindByEmail(req.body);
+    if (user) {
+      res.status(200).json({ message: "Email registered before" });
+    } else {
+      (await userRepository.InsertUser(req.body))
+        ? res.status(200).json({ message: "Registered Successfully" })
+        : res.status(500).json({ message: "Database Error Occurred" });
+    }
   } else {
     res.status(400).json(validation_errors);
   }
