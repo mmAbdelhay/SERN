@@ -29,3 +29,18 @@ module.exports.FindByEmail = async (user) => {
     return false;
   }
 };
+
+module.exports.FindByID = async (user) => {
+  try {
+    const User_retrieved = await db.User.findOne({
+      where: {
+        id: user._id,
+      },
+      attributes: ["id", "name", "email"],
+    });
+    return User_retrieved ? User_retrieved : false;
+  } catch (err) {
+    logger.error("Database Selection failed err: ", err);
+    return false;
+  }
+};

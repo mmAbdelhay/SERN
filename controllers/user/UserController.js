@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const jwt = require("jsonwebtoken");
 const validators = require("./validators");
 const userRepository = require("../../repositories/userRepository");
 const hashComparer = require("../../services/hash");
@@ -31,6 +32,20 @@ router.post("/register", async (req, res) => {
     }
   } else {
     res.status(400).json(validation_errors);
+  }
+});
+
+router.get("/user", async (req, res) => {
+  const userInfo = jwt.decode(req.headers.authorization.split(" ")[1]);
+  if (userInfo) {
+    const userFound = await userRepository.FindByID(userInfo);
+    if (userFound) {
+      res.status(200).json({ user: userFound });
+    } else {
+      res.status(404).json({ message: "User not found." });
+    }
+  } else {
+    res.status(403).json({ message: "User not authorized" });
   }
 });
 
