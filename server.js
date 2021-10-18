@@ -1,15 +1,20 @@
+require("dotenv").config();
+
 const cors = require("cors");
 const express = require("express");
-const dotenv = require("dotenv");
 const DB = require("./database/connection");
 
-dotenv.config();
-const port = process.env.PORT || 8080;
-const app = express();
-app.use(cors());
-app.use(express.json({ limit: "5mb" }));
+const userPort = process.env.USER_PORT || 8080;
+const adminPort = process.env.ADMIN_PORT || 8000;
 
-require("./routes/routes.js")(app);
+const userApp = express();
+const adminApp = express();
+userApp.use(cors());
+userApp.use(express.json({ limit: "5mb" }));
+
+require("./routes/routes.js")(userApp);
+require("./admin/adminPanel.js")(adminApp);
 
 DB.connectToDB();
-app.listen(port, () => console.log("Server Up on port " + port));
+adminApp.listen(adminPort, () => console.log("Admin dashboard listening on port " + adminPort));
+userApp.listen(userPort, () => console.log("Server Up on port " + userPort));
